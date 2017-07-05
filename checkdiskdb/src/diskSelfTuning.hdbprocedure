@@ -1,0 +1,57 @@
+PROCEDURE "checkdisk.checkdiskdb::diskSelfTuning" ( )
+   LANGUAGE SQLSCRIPT
+   SQL SECURITY INVOKER
+   --DEFAULT SCHEMA <default_schema_name>
+   READS SQL DATA AS
+BEGIN
+declare commandResult CLOB;
+declare result INT;
+declare iobound_stmt_cnt INT;
+declare disk_usage INT;
+
+    /* 1. Check if the disk size is reaching the threshold, filtering only the current host. */
+    select TOP 1 (USED_SIZE * 100 / TOTAL_SIZE) into disk_usage
+        from source_alert_2_disks
+        where HOST = (select TOP 1 VALUE
+                        from M_HOST_INFORMATION
+                        WHERE KEY='net_hostnames')
+        order by (USED_SIZE * 100 / TOTAL_SIZE) asc;
+
+    if :disk_usage < :threshold
+    then
+        select 'Disk usage is lower than high threshold, so skip the disk reclaim operation.' as "Output" from dummy;
+        return;
+    end if;
+
+    /* 2. Check if we are recommended to reclaim the disk space. If not, just skip it. */
+    call management_console_proc('dvol info' , '', :commandResult);
+    select locate(:commandResult, 'We recommend reclaiming this DataVolume') into result from dummy;
+
+    if :result = 0
+    then
+        select 'We are not recommended to take the"dvol reclaim" operation.' as "Output" from dummy;
+        return;
+    end if;
+
+    /* 3. We should not shrink a DataVolume while the database is busy, e.g. during a load, a merge or any other kind of IO bound operation. */
+    /*    If any such IO bound operation active, skip the dvol operation. */
+    select count(*) into iobound_stmt_cnt from M_ACTIVE_STATEMENTS t
+            inner join
+            (
+                select '%delta merge%' Col from dummy
+                union select '%load%' from dummy
+                union select '%unload%' from dummy
+            ) List
+            on lcase(t.statement_string) like List.Col
+            where t.statement_string not like '%M_ACTIVE_STATEMENTS%';
+
+    if :iobound_stmt_cnt <> 0
+    then
+        select 'There are IO bound operations active, so skip to wait for next execution.' as "Output" from dummy;
+        return;
+    end if;
+
+    /* 4. Do the space reclaim operation. */
+    call management_console_proc('dvol reclaim -o 120 -v' , '', :commandResult);
+    select :commandResult as"Output" from dummy;
+END

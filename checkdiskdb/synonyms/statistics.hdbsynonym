@@ -1,0 +1,8 @@
+{
+  "source_alert_2_disks": {
+    "target": {
+      "object": "source_alert_2_disks",
+      "schema": "_SYS_STATISTICS"
+    }
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "M_HOST_INFORMATION": {
+    "target": {
+      "object": "M_HOST_INFORMATION",
+      "schema": "SYS"
+    }
+  },
+  "M_ACTIVE_STATEMENTS": {
+    "target": {
+      "object": "M_ACTIVE_STATEMENTS",
+      "schema": "SYS"
+    }
+  },
+  "management_console_proc": {
+    "target": {
+      "object": "management_console_proc",
+      "schema": "SYS"
+    }
+  },
+  "dummy": {
+    "target": {
+      "object": "dummy",
+      "schema": "SYS"
+    }
+  },
+  "SERIES_GENERATE_TIMESTAMP": {
+    "target": {
+      "object": "SERIES_GENERATE_TIMESTAMP",
+      "schema": "SYS"
+    }
+  }
+}
