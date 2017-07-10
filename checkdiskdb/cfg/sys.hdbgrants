@@ -1,0 +1,78 @@
+{
+  "hdi-sys-service": {
+    "object_owner" : {
+      "object_privileges":[ 
+        { 
+          "schema":"SYS",
+          "name": "M_HOST_INFORMATION",
+          "type": "VIEW",
+          "privileges":["SELECT"]
+        },
+        { 
+          "schema":"SYS",
+          "name": "M_ACTIVE_STATEMENTS",
+          "type": "VIEW",
+          "privileges":["SELECT"]
+        },
+		{ 
+          "schema":"SYS",
+          "name": "management_console_proc",
+          "type": "FUNCTION",
+          "privileges":["EXECUTE"]
+        },        
+		{ 
+          "schema":"SYS",
+          "name": "M_TABLES",
+          "type": "VIEW",
+          "privileges":["SELECT"]
+        },         
+        { 
+          "schema":"SYS",
+          "name": "TABLES",
+          "type": "VIEW",          
+          "privileges":["SELECT"]
+        }, 
+        { 
+          "schema":"SYS",
+          "name": "USERS",
+          "type": "VIEW",          
+          "privileges":["SELECT"]
+        }         
+      ]
+    },
+    "application_user" : {
+      "object_privileges":[ 
+        { 
+          "schema":"SYS",
+          "name": "VIEWS",
+          "type": "VIEW",          
+          "privileges":["SELECT"]
+        },
+		{ 
+          "schema":"SYS",
+          "name": "SERIES_GENERATE_TIMESTAMP",
+          "type": "FUNCTION",
+          "privileges":["EXECUTE"]
+        },        
+		{ 
+          "schema":"SYS",
+          "name": "M_TABLES",
+          "type": "VIEW",
+          "privileges":["SELECT"]
+        },             
+        { 
+          "schema":"SYS",
+          "name": "TABLES",
+          "type": "VIEW",          
+          "privileges":["SELECT"]
+        }, 
+        { 
+          "schema":"SYS",
+          "name": "USERS",
+          "type": "VIEW",          
+          "privileges":["SELECT"]
+        }         
+      ]
+    }
+  }
+}

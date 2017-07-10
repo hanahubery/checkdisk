@@ -7,10 +7,10 @@ modules:
    type: hdb
    path: checkdiskdb
    requires:
-    - name: hdi-container
+    - name: hdi-sys-service
 
 resources:
- - name: hdi-container
+ - name: hdi-sys-service
    properties:
       hdi-container-name: ${service-name}
    type: com.sap.xs.hdi-container
